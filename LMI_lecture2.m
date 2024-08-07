@@ -13,18 +13,25 @@ Omega_phi = [-2.5087 -0.7005];
 fuzzy_counter = 0;
 
 %model 
+A = cell(8,1); % 8行1列のセル配列を初期化
 for i = 1:2
     for j = 1:2
         for k = 1:2
-            fuzzy_counter += 1;
-            A{fuzzy_counter}=[0 Omega_kappa[i] 0 0 0;
-                            -Omega_kappa[i] 0 Omega_chi[j] 0 0;
-                            0 0 0 Omega_phi[k] 0;
-                            0 0 0 0 1;
-                            0 0 0 0 0];
+            fuzzy_counter = fuzzy_counter + 1;
+            A{fuzzy_counter} = [0 Omega_kappa(i) 0 0 0;
+                               -Omega_kappa(i) 0 Omega_chi(j) 0 0;
+                                0 0 0 Omega_phi(k) 0;
+                                0 0 0 0 1;
+                                0 0 0 0 0];
         end
     end
 end
+
+% A行列の出力
+% for index = 1:fuzzy_counter
+%     disp(['A{' num2str(index) '} = ']);
+%     disp(A{index});
+% end
 
 % setlmis([]);%LMI宣言
 % P=lmivar(1,[2 1]);%リアプノフ関数
