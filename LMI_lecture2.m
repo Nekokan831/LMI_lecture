@@ -1,6 +1,8 @@
 
 %LMI lecture1
 clear all;
+% LMI条件の通し番号 
+lmi_num = 0;
 
 % ファジィ変数の最大最小
 % Mさんの卒論
@@ -13,16 +15,17 @@ Omega_phi = [-2.5087 -0.7005];
 fuzzy_counter = 0;
 
 %model 
-A = cell(8,1); % 8行1列のセル配列を初期化
+A_c = cell(8,1); % 8行1列のセル配列を初期化
 for i = 1:2
     for j = 1:2
         for k = 1:2
             fuzzy_counter = fuzzy_counter + 1;
-            A{fuzzy_counter} = [0 Omega_kappa(i) 0 0 0;
-                               -Omega_kappa(i) 0 Omega_chi(j) 0 0;
-                                0 0 0 Omega_phi(k) 0;
-                                0 0 0 0 1;
-                                0 0 0 0 0];
+            A_c{fuzzy_counter} = [0 Omega_kappa(i) 0 0 0 0;
+                               -Omega_kappa(i) 0 Omega_chi(j) 0 0 0;
+                                0 0 0 Omega_phi(k) 0 0;
+                                0 0 0 0 1 0;
+                                0 0 0 0 0 0;
+                                0 0 0 0 0 0];
         end
     end
 end
@@ -33,10 +36,23 @@ end
 %     disp(A{index});
 % end
 
-% setlmis([]);%LMI宣言
-% P=lmivar(1,[2 1]);%リアプノフ関数
+setlmis([]);%LMI宣言
+P=lmivar(1,[6 1]);%リアプノフ関数 対角以外0にするなら-1？
 
-% %LMI条件
+% まず，Pは正定なのでその定義
+% -lmi_numは，一つ目の条件が0より大きいという意味
+lmi_num = lmi_num + 1;
+lmiterm([-lmi_num 1 1 P], 1, 1)
+
+% -lmi_numは，lmi_num番目の条件が0より大きいという意味
+% A{i}までで -PA_i を表し，sでシンボリックになるので，-PA_i - A_i^TPになる
+for i = 1:8
+    lmi_num = lmi_num + 1;
+    lmiterm([-lmi_num 1 1 P], -1, A{i},'s')
+end
+
+
+%LMI条件
 % lmiterm([-1 1 1 P],1,1);
 % lmiterm([2 1 1 P],1,A{1},'s');
 % lmiterm([3 1 1 P],1,A{2},'s');
