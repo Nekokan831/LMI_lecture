@@ -8,7 +8,7 @@ lmi_num = 0;
 % Mさんの卒論
 Omega_kappa= [0.0 9.5];
 
-Omega_chi= [8.2699 14.0];
+Omega_chi= [1.2699 1.0];
 
 Omega_phi = [-2.5087 -0.7005];
 
@@ -48,7 +48,7 @@ lmiterm([-lmi_num 1 1 P], 1, 1)
 % A{i}までで -PA_i を表し，sでシンボリックになるので，-PA_i - A_i^TPになる
 for i = 1:8
     lmi_num = lmi_num + 1;
-    lmiterm([-lmi_num 1 1 P], -1, A{i},'s')
+    lmiterm([-lmi_num 1 1 P], -1, A_c{i},'s')
 end
 
 
@@ -57,11 +57,11 @@ end
 % lmiterm([2 1 1 P],1,A{1},'s');
 % lmiterm([3 1 1 P],1,A{2},'s');
 
-% %LMIを解く
-% LMISYS=getlmis;
-% [tmin,xfeas]=feasp(LMISYS)%解けた値を格納
+%LMIを解く
+LMISYS=getlmis;
+[tmin,xfeas] = feasp(LMISYS);%解けた値を格納
 %                           %tmin<0なら解けてる
 %                           %help feasp 参照
-% %解けたPの呼び出し
-% Po=dec2mat(LMISYS,xfeas,P)
-% Poeig=eig(Po)%固有値による解チェック
+%解けたPの呼び出し
+Po = dec2mat(LMISYS,xfeas,P)
+Poeig = eig(Po) %固有値による解チェック
